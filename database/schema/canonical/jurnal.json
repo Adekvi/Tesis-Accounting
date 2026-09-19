@@ -1,0 +1,24 @@
+{
+    "entity": "jurnal",
+    "location": "tenant",
+    "description": "Entri jurnal double-entry per toko",
+    "fields": {
+        "id": { "type": "uuid", "primary_key": true },
+        "tanggal": { "type": "date" },
+        "kode_akun": { "type": "string", "ref": "akun.kode_akun" },
+        "debit": { "type": "decimal", "precision": 18, "scale": 2 },
+        "kredit": { "type": "decimal", "precision": 18, "scale": 2 },
+        "keterangan": { "type": "string", "length": 255, "nullable": true },
+        "sumber_transaksi": {
+            "type": "enum",
+            "values": [
+                "pembelian",
+                "penjualan",
+                "retur",
+                "manual",
+                "tutup_buku"
+            ]
+        },
+        "referensi_id": { "type": "uuid", "nullable": true }
+    }
+}

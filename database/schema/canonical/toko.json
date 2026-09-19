@@ -1,0 +1,18 @@
+{
+    "entity": "toko",
+    "location": "central",
+    "description": "Registry master seluruh toko/apotek",
+    "fields": {
+        "id": { "type": "uuid", "primary_key": true },
+        "nama_toko": { "type": "string", "length": 100 },
+        "engine_db": {
+            "type": "enum",
+            "values": ["mysql", "pgsql", "mongodb"]
+        },
+        "nama_database": { "type": "string", "length": 100, "unique": true },
+        "status": {
+            "type": "enum",
+            "values": ["pending", "active", "suspended"]
+        }
+    }
+}

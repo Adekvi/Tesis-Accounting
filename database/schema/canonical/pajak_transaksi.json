@@ -1,0 +1,17 @@
+{
+    "entity": "pajak_transaksi",
+    "location": "tenant",
+    "description": "Detail perhitungan pajak per transaksi penjualan/pengadaan",
+    "fields": {
+        "id": { "type": "uuid", "primary_key": true },
+        "jenis_pajak": {
+            "type": "enum",
+            "values": ["PPN", "PPh21", "PPh23", "PPh_final"]
+        },
+        "transaksi_id": { "type": "uuid" },
+        "dasar_pengenaan": { "type": "decimal", "precision": 18, "scale": 2 },
+        "tarif_persen": { "type": "decimal", "precision": 5, "scale": 2 },
+        "nilai_pajak": { "type": "decimal", "precision": 18, "scale": 2 },
+        "periode_pajak": { "type": "string", "length": 7 }
+    }
+}

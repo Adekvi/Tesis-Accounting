@@ -1,0 +1,27 @@
+{
+    "entity": "akun",
+    "location": "tenant",
+    "description": "Chart of accounts / rekening akuntansi per toko",
+    "fields": {
+        "kode_akun": { "type": "string", "length": 10, "primary_key": true },
+        "nama_akun": { "type": "string", "length": 100 },
+        "kategori": {
+            "type": "enum",
+            "values": [
+                "aktiva",
+                "kewajiban",
+                "modal",
+                "pendapatan",
+                "biaya",
+                "pajak"
+            ]
+        },
+        "kode_induk": {
+            "type": "string",
+            "length": 10,
+            "nullable": true,
+            "ref": "akun.kode_akun"
+        },
+        "saldo_normal": { "type": "enum", "values": ["debit", "kredit"] }
+    }
+}
