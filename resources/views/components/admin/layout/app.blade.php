@@ -9,6 +9,7 @@
 
     <x-admin.include.css />
     @stack('css')
+
 </head>
 
 <body>

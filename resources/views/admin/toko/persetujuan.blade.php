@@ -1,49 +1,47 @@
-<x-admin.layout.app title="Persetujuan Pendaftaran Toko">
+<div data-title="Persetujuan toko">
+    <h1>Persetujuan toko</h1>
 
-    <div class="breadcrumb">Super Admin / Manajemen Toko / Persetujuan Pendaftaran</div>
+    @if (session('success'))
+        <p class="note ok">{{ session('success') }}</p>
+    @endif
+    @if (session('error'))
+        <p class="note">{{ session('error') }}</p>
+    @endif
+    @if (session('api_key'))
+        <p class="note ok">API key toko (hanya tampil sekali): <code>{{ session('api_key') }}</code></p>
+    @endif
 
-    <div class="card">
-        <h3>Menunggu persetujuan</h3>
-        <div class="table-scroll">
-            <table>
-                <thead>
+    <div class="scroll">
+        <table>
+            <thead>
+                <tr>
+                    <th>Toko</th>
+                    <th>Mesin</th>
+                    <th>Database</th>
+                    <th>Terdaftar</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @forelse($pending as $t)
                     <tr>
-                        <th>Toko</th>
-                        <th>Pemilik</th>
-                        <th>Kota</th>
-                        <th>Database</th>
-                        <th>Status</th>
-                        <th></th>
+                        <td>{{ $t->nama_toko }}</td>
+                        <td>{{ $t->engine_db }}</td>
+                        <td><code>{{ $t->nama_database }}</code></td>
+                        <td>{{ \Illuminate\Support\Carbon::parse($t->created_at)->format('d M Y') }}</td>
+                        <td>
+                            <form method="POST" action="{{ route('admin.toko.setujui', $t->id) }}">
+                                @csrf
+                                <button class="btn">Setujui dan buat database</button>
+                            </form>
+                        </td>
                     </tr>
-                </thead>
-                <tbody>
-                    @forelse ($pending as $s)
-                        <tr>
-                            <td>{{ $s['toko'] }}</td>
-                            <td>{{ $s['pemilik'] }}</td>
-                            <td>{{ $s['kota'] }}</td>
-                            <td>{{ $s['db'] }}</td>
-                            <td><span class="badge badge-pending">menunggu</span></td>
-                            <td>
-                                <form method="POST" action="{{ route('admin.toko.setujui', $s['id']) }}">
-                                    @csrf
-                                    <button class="btn-mini" type="submit">Setujui</button>
-                                </form>
-                            </td>
-                        </tr>
-                    @empty
-                        <tr>
-                            <td colspan="6" class="empty-note">Tidak ada pendaftaran yang menunggu saat ini.</td>
-                        </tr>
-                    @endforelse
-                </tbody>
-            </table>
-        </div>
+                @empty
+                    <tr>
+                        <td colspan="5" class="empty">Tidak ada toko yang menunggu persetujuan.</td>
+                    </tr>
+                @endforelse
+            </tbody>
+        </table>
     </div>
-
-    <div class="card">
-        <p class="empty-note">Menyetujui toko di sini yang akan memicu pembuatan database + api key baru sesuai alur
-            konsep sistem.</p>
-    </div>
-
-</x-admin.layout.app>
+</div>
