@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Middleware\Admin\RoleGate;
+use App\Http\Middleware\ResolveTenant;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -12,7 +14,8 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware) {
         $middleware->api(append: [
-            \App\Http\Middleware\ResolveTenant::class,
+            ResolveTenant::class,
+            'role' => RoleGate::class
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
