@@ -18,14 +18,21 @@ class DashboardController extends Controller
 
         if (! $stats) {
             $stats = $this->loadStats();
-            // Hanya cache hasil yang berhasil, supaya error koneksi tidak "menempel" 60 detik.
             if ($stats['ok']) {
                 Cache::put('admin.stats', $stats, 60);
             }
         }
 
-        return $this->render($request, 'admin.dashboard.view', [
-            'title' => 'Dashboard',
+        // Full page dengan component
+        if (! $request->hasHeader('X-Partial')) {
+            return view('admin.dashboard.index', [   // view baru yang memakai <x-admin.layout.app>
+                'title' => 'Dashboard',
+                'stats' => $stats,
+            ]);
+        }
+
+        // Partial saja
+        return view('admin.dashboard.partial', [
             'stats' => $stats,
         ]);
     }

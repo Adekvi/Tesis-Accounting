@@ -103,7 +103,6 @@ class AdminMenu
         ];
     }
 
-
     public static function store(): array
     {
         return [
@@ -253,7 +252,6 @@ class AdminMenu
 
         ];
     }
-
 
     public static function coa(): array
     {

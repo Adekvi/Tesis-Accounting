@@ -4,17 +4,26 @@ namespace App\Http\Controllers\Admin\Concern;
 
 // use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
 trait RendersAdminPage
 {
-    protected function render(Request $request, string $view, array $data)
+    protected function render(Request $request, string $view, array $data = []): Response
     {
-        $content = view($view, $data)->render();
+        $title = $data['title'] ?? 'Dashboard';
 
-        $response = $request->hasHeader('X-Partial')
-            ? response($content)
-            : response(view('admin.layout', ['content' => $content, 'title' => $data['title']])->render());
+        if ($request->hasHeader('X-Partial')) {
+            $content = view($view, $data)->render();
+            return response($content)
+                ->header('Vary', 'X-Partial')
+                ->header('X-Page-Title', $title);
+        }
 
-        return $response->header('Vary', 'X-Partial');
+        // Pakai component class secara langsung
+        return response()
+            ->view('components.admin.layout.app', array_merge($data, [
+                'title' => $title,
+                // Slot diisi lewat view yang di-extend / @slot, atau render partial dulu
+            ]));
     }
 }

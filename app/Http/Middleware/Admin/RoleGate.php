@@ -9,15 +9,20 @@ use Symfony\Component\HttpFoundation\Response;
 
 class RoleGate
 {
-    /**
-     * Handle an incoming request.
-     *
-     * @param  Closure(Request): (Response)  $next
-     */
     public function handle(Request $request, Closure $next): Response
     {
-        if (! app()->environment('local')) {
-            abort_unless(Auth::check(), 403, 'Area ini khusus Super Admin.');
+        if (! Auth::check()) {
+            return redirect()->route('landing.auth.login')
+                ->with('error', 'Anda harus login sebagai Super Admin.');
+        }
+
+        $user = Auth::user();
+
+        $isSuperAdmin = ($user->role ?? null) === 'super_admin'
+            || ($user->is_super_admin ?? false) === true;
+
+        if (! $isSuperAdmin) {
+            abort(403, 'Area ini khusus Super Admin.');
         }
 
         return $next($request);
